@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>超标量处理器基础学习笔记————第一章 | MarkusChu的博客</title>
+  <title>超标量处理器基础学习笔记————第二章：流水线处理器 | MarkusChu的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="毕业于北京航空航天大学，在此记录我的转行历程">
+  <meta name="description" content="流水线是提高系统吞吐率的强大技术。1980s，risc设计的大部分技术都直接或间接以高效流水线技术为目标。深度流水是获得高速时钟频率的必要条件。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="超标量处理器基础学习笔记————第一章">
+<meta property="og:title" content="超标量处理器基础学习笔记————第二章：流水线处理器">
 <meta property="og:url" content="http://example.com/2023/01/16/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%BA%8C%E7%AB%A0/index.html">
 <meta property="og:site_name" content="MarkusChu的博客">
-<meta property="og:description" content="毕业于北京航空航天大学，在此记录我的转行历程">
+<meta property="og:description" content="流水线是提高系统吞吐率的强大技术。1980s，risc设计的大部分技术都直接或间接以高效流水线技术为目标。深度流水是获得高速时钟频率的必要条件。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2023-01-16T14:07:07.000Z">
-<meta property="article:modified_time" content="2023-01-16T14:41:09.098Z">
+<meta property="article:modified_time" content="2023-01-17T19:47:31.537Z">
 <meta property="article:author" content="MarkusChu">
 <meta property="article:tag" content="c&#x2F;c++,linux,爱折腾，好奇心强">
 <meta name="twitter:card" content="summary">
@@ -150,7 +150,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      超标量处理器基础学习笔记————第一章
+      超标量处理器基础学习笔记————第二章：流水线处理器
     </h1>
   
 
@@ -164,7 +164,69 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>流水线是提高系统吞吐率的强大技术。1980s，risc设计的大部分技术都直接或间接以高效流水线技术为目标。<br>深度流水是获得高速时钟频率的必要条件。</p>
+<span id="more"></span>
+<hr>
+<h2 id="2-1-流水线基础"><a href="#2-1-流水线基础" class="headerlink" title="2.1 流水线基础"></a>2.1 流水线基础</h2><p>指令流水线（本书重点）和算术流水线。</p>
+<h3 id="2-1-1-流水线设计"><a href="#2-1-1-流水线设计" class="headerlink" title="2.1.1 流水线设计"></a>2.1.1 流水线设计</h3><h4 id="2-1-1-1-提出的动机"><a href="#2-1-1-1-提出的动机" class="headerlink" title="2.1.1.1 提出的动机"></a>2.1.1.1 提出的动机</h4><p>提高系统吞吐率的同时几乎不增加系统开销。</p>
+<p>介绍了IBM360中的earle锁存器。</p>
+<h4 id="2-1-1-2-局限性"><a href="#2-1-1-2-局限性" class="headerlink" title="2.1.1.2 局限性"></a>2.1.1.2 局限性</h4><p>流水线地每一段可以看作是一个组合逻辑F加上一个锁存器L，信号通过F后在L锁存；</p>
+<p>T_MAX通过F地最大传输延迟；</p>
+<p>T_MIN通过F地最小传输延迟；</p>
+<p>T_L正确建立时钟信号所需要地额外时间，包括必要地建立和保持时间。</p>
+<p>时钟周期 T &gt; T_MAX - T_MIN + T_L</p>
+<p>T_MAX - T_MIN可以趋向于0（延长最小传输路径）</p>
+<p>T_L受整个系统内时钟信号分布影响；&#x3D;&#x3D;&gt;流水线深度与T_L有关。</p>
+<h4 id="2-1-1-3-权衡"><a href="#2-1-1-3-权衡" class="headerlink" title="2.1.1.3 权衡"></a>2.1.1.3 权衡</h4><p>流水线性能（深度）和价格；（深度受时钟频率的限制）</p>
+<p>一个k级流水线的价格C：<br>C&#x3D;G+k∗L（线性）</p>
+<p>其中k为流水线的段数，L为每增加一个锁存器的价格，G为原本非流水硬件的价格。</p>
+<p>流水线的性能：<br>P&#x3D;1&#x2F;(T&#x2F;k+S)（非线性）</p>
+<p>其中T为非流水线系统延迟，S是由于引入锁存器而带来的延迟<br>价格性能比：</p>
+<p>C&#x2F;P&#x3D;LT+GS+LSk+GT&#x2F;k<br>求导：<br>Kopt&#x3D;(GT&#x2F;LS)^(1&#x2F;2)</p>
+<p>当k小于Kopt时，流水线系统称为 不够完全流水化，即可以进一步实现流水化，增加流水线深度<br>当k大于Kopt时，流水线系统称为 过度流水化，此时增加流水线深度而提高的性能由于价格增加而抵消</p>
+<p>本模型为考虑到执行的程序和流水线的动态行为。</p>
+<h3 id="2-1-2-算术流水线的实例"><a href="#2-1-2-算术流水线的实例" class="headerlink" title="2.1.2 算术流水线的实例"></a>2.1.2 算术流水线的实例</h3><h4 id="2-1-2-1-浮点乘法"><a href="#2-1-2-1-浮点乘法" class="headerlink" title="2.1.2.1 浮点乘法"></a>2.1.2.1 浮点乘法</h4><h4 id="2-1-2-2-流水化的浮点乘法器"><a href="#2-1-2-2-流水化的浮点乘法器" class="headerlink" title="2.1.2.2 流水化的浮点乘法器"></a>2.1.2.2 流水化的浮点乘法器</h4><p>非流水化的浮点乘法器可以通过流水化来提高吞吐率。体会区别。</p>
+<h3 id="2-1-3-流水线理想假设"><a href="#2-1-3-流水线理想假设" class="headerlink" title="2.1.3 流水线理想假设"></a>2.1.3 流水线理想假设</h3><p>1、一致的运算分量：要完成的整个运算量可以均匀的分成延迟一致的若干分量，将以前的运算量分为若干分量时，没有引入无效时间；段间缓冲的引入没有带来额外的延迟</p>
+<p>2、重复的运算：输入数据有大量相同的，重复的运算，所有的流水段总是被充分利用</p>
+<p>3、独立的运算：所有相同的重复运算之间没有相关性</p>
+<h4 id="2-1-3-1-一致的运算分量"><a href="#2-1-3-1-一致的运算分量" class="headerlink" title="2.1.3.1 一致的运算分量"></a>2.1.3.1 一致的运算分量</h4><p>内部碎片：延迟较短的段中的无效时间。（时钟周期取决于延迟最长的段）</p>
+<p>还有一个内在的假设：流水段之间引入的缓冲且流水线的时钟信号不会带来额外的延迟。<br>&#x3D;&#x3D;&gt;实际芯片设计中可以采用锁存器（比如earle）减小时钟产生的延迟。</p>
+<p>&#x3D;&#x3D;&gt;我们的目标：尽可能使各流水段保持均衡。</p>
+<h4 id="2-1-3-2-重复的运算"><a href="#2-1-3-2-重复的运算" class="headerlink" title="2.1.3.2 重复的运算"></a>2.1.3.2 重复的运算</h4><p>外部碎片：执行流水段的子集时，由于输入数据的同步性，有些流水段空闲，被称为外部碎片。</p>
+<p>这条理想假设还要说明要处理的数据是大量的，以忽略填充和排空的时间。</p>
+<h4 id="2-1-3-3-独立的运算"><a href="#2-1-3-3-独立的运算" class="headerlink" title="2.1.3.3 独立的运算"></a>2.1.3.3 独立的运算</h4><p>任何两个运算间不存在数据相关和控制相关。</p>
+<p>如果相关不可避免，会产生动态的外部碎片，应当尽量减少流水线停顿的次数。</p>
+<h3 id="2-1-4-指令流水线"><a href="#2-1-4-指令流水线" class="headerlink" title="2.1.4 指令流水线"></a>2.1.4 指令流水线</h3><p>指令流水线实际情况和理想情况差距较算是流水线要大。</p>
+<h4 id="2-1-4-1-指令流水线设计"><a href="#2-1-4-1-指令流水线设计" class="headerlink" title="2.1.4.1 指令流水线设计"></a>2.1.4.1 指令流水线设计</h4><p>指令周期：逻辑概念，处理一条指令地时间延迟；体系结构（逻辑）的原语，由ISA定义。<br>机器周期：物理概念，流水线的时钟周期；机器（物理）原语，由微体系结构定义。<br>每一段“指令周期”的时间延迟决定了“机器周期”。</p>
+<p>指令流水线设计的主要任务是将指令周期所对应的运算分成一个子运算的序列，由流水线的各段执行。</p>
+<p>1、一致的运算分量<br>量化流水段，将指令周期分解成多个机器周期的过程；<br>尽量减少内部碎片，对存储器的访问是关键，寻址方式优化；<br>保持流水线均衡；<br>2、重复的运算<br>指令流水线是多功能流水线，处理多种不同的指令；<br>减少每种指令的无效或空闲的机器周期，即减少外部碎片，要对不同指令需要的子运算序列资源进行整合。<br>能支持所有的指令类型；<br>3、独立的运算<br>指令流水线指令彼此并不完全独立，须有内部机制来检测相关。<br>相关会导致流水线停顿，应当尽量减少。</p>
+<h4 id="2-1-4-2-ISA的影响"><a href="#2-1-4-2-ISA的影响" class="headerlink" title="2.1.4.2 ISA的影响"></a>2.1.4.2 ISA的影响</h4><p>1、一致性运算分量：延迟最长的分量一般是存储器访问，是为关键分量。应优化寻址模式，采用快速cache。<br>2、重复的运算：对于RISC结构，外部碎片较少，流水线效率较高。<br>3、独立的运算：尽量减少指令相关引起的流水线停顿，尤其是存储器访问有关。</p>
+<h2 id="2-2-流水线处理器设计"><a href="#2-2-流水线处理器设计" class="headerlink" title="2.2 流水线处理器设计"></a>2.2 流水线处理器设计</h2><p>主要任务：缩小理想和实际的差异</p>
+<p>主要挑战：<br>一致的运算分量&#x3D;&#x3D;&gt;保持流水段均衡<br>重复的运算&#x3D;&#x3D;&gt;统一指令类型<br>独立的运算分量&#x3D;&#x3D;&gt;尽量减少流水线停顿</p>
+<h3 id="2-2-1-保持流水段均衡"><a href="#2-2-1-保持流水段均衡" class="headerlink" title="2.2.1 保持流水段均衡"></a>2.2.1 保持流水段均衡</h3><p>取指（IF） –&gt; 译码（ID） –&gt; 执行 –&gt; 访存 –&gt; 回写（五段流水线）<br>取值 –&gt; 译码 –&gt; 取操作数（OF） –&gt; 执行（EX） –&gt; 存储（OS）（基本流水线）</p>
+<p>基本的是分为5个分量，但不局限；<br>量化流水线可以将多个分量合成一个分量，也可以将1个分量进一步分成多个分量；<br>eg:若某ISA采用定长指令，简单寻址模式和正交指令格式，则IF和ID较其他段设计简单，可将其合并为1个分量。比如MIPS R2000&#x2F;R3000。<br>同时需要考虑硬件能力，一个机器周期内可以处理几次读写请求；</p>
+<h4 id="2-2-1-2-硬件要求"><a href="#2-2-1-2-硬件要求" class="headerlink" title="2.2.1.2 硬件要求"></a>2.2.1.2 硬件要求</h4><p>性价比。<br>硬件包含：每一段进行控制和完成数据操作的逻辑，支持多个流水段同时访问的寄存器文件端口和存储器端口。</p>
+<h4 id="2-2-1-3-指令流水线实例"><a href="#2-2-1-3-指令流水线实例" class="headerlink" title="2.2.1.3 指令流水线实例"></a>2.2.1.3 指令流水线实例</h4><p>两个实例。<br>目前流水线处理器的设计趋势是向着更高的流水程度和更深的流水线深度发展，这样得到的流水线级粒度更小，时钟频率更高。<br>超标量处理器有个趋势是采用多条级数不等的流水线。</p>
+<h3 id="2-2-2-统一指令类型"><a href="#2-2-2-统一指令类型" class="headerlink" title="2.2.2 统一指令类型"></a>2.2.2 统一指令类型</h3><p>由于指令类型不同，指令流水线要想满足不同的需求，必须提供所有指令类型所需要的所有分量的超集。以尽量减少外部碎片。</p>
+<h4 id="2-2-2-1-指令类型的分类"><a href="#2-2-2-1-指令类型的分类" class="headerlink" title="2.2.2.1 指令类型的分类"></a>2.2.2.1 指令类型的分类</h4><p>完成以此运算的三大基本任务：<br>ALU指令：完成算数和逻辑运算；（寄存器）<br>load&#x2F;store指令：完成数据在寄存器及存储器间的移动；（只有该类型能访存，带偏移的寄存器寻址）<br>分支指令：控制指令执行的顺序；（PC相对寻址，带偏移的寄存器寻址）</p>
+<p>指令集设计的关键问题：如何将这三个基本任务分派给ISA中的各种指令。<br>受RISC影响，现代ISA倾向于采用定长、正交的指令格式、load&#x2F;store型指令结构和简单的寻址模式。<br>在现代RISC中，每种指令类型只完成三个基本任务中的一个。</p>
+<h4 id="2-2-2-2-资源需求的整合"><a href="#2-2-2-2-资源需求的整合" class="headerlink" title="2.2.2.2 资源需求的整合"></a>2.2.2.2 资源需求的整合</h4><p>资源整合为6级流水，load使用6级，其他3种指令使用5级；<br>ALU：一个空闲周期MEM<br>ST：不需要WB<br>branch：不需要WB<br>优化目标：<br>1、减少所有指令类型需要的资源总量<br>2、提高所有流水段的利用率<br>3、减少每种指令类型的总延迟（如果某指令的空闲周期不可避免，尝试把它放到流水线末尾）</p>
+<h4 id="2-2-2-3-指令流水线的实现"><a href="#2-2-2-3-指令流水线的实现" class="headerlink" title="2.2.2.3 指令流水线的实现"></a>2.2.2.3 指令流水线的实现</h4><h3 id="2-2-3-减少流水线的停顿"><a href="#2-2-3-减少流水线的停顿" class="headerlink" title="2.2.3 减少流水线的停顿"></a>2.2.3 减少流水线的停顿</h3><p>如果有指令相关，化解相关可能会导致流水线停顿；</p>
+<h4 id="2-2-3-1-程序相关性和流水线相关"><a href="#2-2-3-1-程序相关性和流水线相关" class="headerlink" title="2.2.3.1 程序相关性和流水线相关"></a>2.2.3.1 程序相关性和流水线相关</h4><p>真相关：RAW，先写后读<br>反相关：WAR，先读后写<br>输出相关：WAW，写后写</p>
+<p>全序执行:指令序列中所有运算分量顺序执行<br>保证程序语义的必要条件是不违背所有指令间的相关。对程序相关性的违背称作流水线相关。</p>
+<h4 id="2-2-3-2-流水线相关的确定"><a href="#2-2-3-2-流水线相关的确定" class="headerlink" title="2.2.3.2 流水线相关的确定"></a>2.2.3.2 流水线相关的确定</h4><p>存储器数据相关&#x2F;寄存器数据相关&#x2F;控制相关<br>控制相关可以看作是关于PC的WAR相关。</p>
+<h4 id="2-2-3-3-化解流水线相关"><a href="#2-2-3-3-化解流水线相关" class="headerlink" title="2.2.3.3 化解流水线相关"></a>2.2.3.3 化解流水线相关</h4><p>延迟分支解决控制相关：在发生分支后的时钟周期内插入一定会执行的指令以减少等待时间。<br>停止执行发生相关的指令，并保证对相关寄存器的读写是按正常顺序进行的；</p>
+<h4 id="2-2-3-4-通过定向路径减少开销"><a href="#2-2-3-4-通过定向路径减少开销" class="headerlink" title="2.2.3.4 通过定向路径减少开销"></a>2.2.3.4 通过定向路径减少开销</h4><p>定向路径和关键定向路径的概念<br>通过定向路径减少开销：新增物理的定向路径输出数据；</p>
+<h4 id="2-2-3-5-流水线互锁的实现"><a href="#2-2-3-5-流水线互锁的实现" class="headerlink" title="2.2.3.5 流水线互锁的实现"></a>2.2.3.5 流水线互锁的实现</h4><p>流水线互锁机制：检测出所有的流水线相关，并保证所有相关得到满足；流水线互锁机制包括停止流水线的某一段以及数据在定向路径中的传输控制等。（ALU的RAW，Load的RAW，条件分支指令）</p>
+<h3 id="2-2-4-产品化的流水线处理器"><a href="#2-2-4-产品化的流水线处理器" class="headerlink" title="2.2.4 产品化的流水线处理器"></a>2.2.4 产品化的流水线处理器</h3><p>流水线技术在RISC和CISC均得到了成功的应用。</p>
+<h4 id="2-2-4-1-RISC实例"><a href="#2-2-4-1-RISC实例" class="headerlink" title="2.2.4.1 RISC实例"></a>2.2.4.1 RISC实例</h4><h4 id="2-2-4-2-CISC实例"><a href="#2-2-4-2-CISC实例" class="headerlink" title="2.2.4.2 CISC实例"></a>2.2.4.2 CISC实例</h4><h4 id="2-2-4-3-标量流水线处理器的性能"><a href="#2-2-4-3-标量流水线处理器的性能" class="headerlink" title="2.2.4.3 标量流水线处理器的性能"></a>2.2.4.3 标量流水线处理器的性能</h4><p>使CPI接近1</p>
+<h2 id="2-3-深流水线处理器"><a href="#2-3-深流水线处理器" class="headerlink" title="2.3 深流水线处理器"></a>2.3 深流水线处理器</h2><p>深流水线能缩短时钟周期，提高时钟频率。<br>要保证总体性能有所提高，频率的增加要超过CPI的增加。</p>
+<p>降低深流水线中分支指令带来的负面影响的两种方法：<br>1、减少前段流水线（取指段到完成分支指令的相应段的距离）的段数，例如RISC，减少译码的复杂性，前端段数就会比较少<br>2、将前段流水线的一部分移至后端，例如将译码结果存储在某个cache中，跳过之后的译码段</p>
+<p>增加流水线深度的权衡（之前有性能和价格的权衡）<br>1、硬件开销和性能提升之间的权衡<br>2、增加CPI和提高时钟频率之间的权衡</p>
+<h2 id="2-4-总结"><a href="#2-4-总结" class="headerlink" title="2.4 总结"></a>2.4 总结</h2><p>流水线技术是一项可以用于任何ISA的微体系结构技术。<br>性能的主要障碍是流水线停顿，其中最主要的部分是控制相关引起的分支开销。用动态预测分支来减少。</p>
+<p>减小分支开销的方法：<br>1、减少前段流水线的段数<br>2、增加动态分支预测算法的准确性</p>
+<p>传统的CPU设计观念是数据通路和控制通路的设计，流水线这种划分已经不明显。皆被流水化，被合并到同一条流水线。</p>
+
       
 
       
@@ -304,7 +366,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">2.1 流水线基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E6%B5%81%E6%B0%B4%E7%BA%BF%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.1.</span> <span class="toc-text">2.1.1 流水线设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-1-%E6%8F%90%E5%87%BA%E7%9A%84%E5%8A%A8%E6%9C%BA"><span class="toc-number">1.1.1.</span> <span class="toc-text">2.1.1.1 提出的动机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-2-%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">1.1.2.</span> <span class="toc-text">2.1.1.2 局限性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-3-%E6%9D%83%E8%A1%A1"><span class="toc-number">1.1.3.</span> <span class="toc-text">2.1.1.3 权衡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E7%AE%97%E6%9C%AF%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.2.</span> <span class="toc-text">2.1.2 算术流水线的实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-1-%E6%B5%AE%E7%82%B9%E4%B9%98%E6%B3%95"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1.2.1 浮点乘法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-2-%E6%B5%81%E6%B0%B4%E5%8C%96%E7%9A%84%E6%B5%AE%E7%82%B9%E4%B9%98%E6%B3%95%E5%99%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.1.2.2 流水化的浮点乘法器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%90%86%E6%83%B3%E5%81%87%E8%AE%BE"><span class="toc-number">1.3.</span> <span class="toc-text">2.1.3 流水线理想假设</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-1-%E4%B8%80%E8%87%B4%E7%9A%84%E8%BF%90%E7%AE%97%E5%88%86%E9%87%8F"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1.3.1 一致的运算分量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-2-%E9%87%8D%E5%A4%8D%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.1.3.2 重复的运算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-3-%E7%8B%AC%E7%AB%8B%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.1.3.3 独立的运算</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-%E6%8C%87%E4%BB%A4%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">1.4.</span> <span class="toc-text">2.1.4 指令流水线</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-4-1-%E6%8C%87%E4%BB%A4%E6%B5%81%E6%B0%B4%E7%BA%BF%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.4.1.</span> <span class="toc-text">2.1.4.1 指令流水线设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-4-2-ISA%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-number">1.4.2.</span> <span class="toc-text">2.1.4.2 ISA的影响</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">2.2 流水线处理器设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-%E4%BF%9D%E6%8C%81%E6%B5%81%E6%B0%B4%E6%AE%B5%E5%9D%87%E8%A1%A1"><span class="toc-number">2.1.</span> <span class="toc-text">2.2.1 保持流水段均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-2-%E7%A1%AC%E4%BB%B6%E8%A6%81%E6%B1%82"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.2.1.2 硬件要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-3-%E6%8C%87%E4%BB%A4%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%AE%9E%E4%BE%8B"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.2.1.3 指令流水线实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-%E7%BB%9F%E4%B8%80%E6%8C%87%E4%BB%A4%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">2.2.2 统一指令类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-1-%E6%8C%87%E4%BB%A4%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.2.1 指令类型的分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-2-%E8%B5%84%E6%BA%90%E9%9C%80%E6%B1%82%E7%9A%84%E6%95%B4%E5%90%88"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2.2 资源需求的整合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-3-%E6%8C%87%E4%BB%A4%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.2.3 指令流水线的实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-%E5%87%8F%E5%B0%91%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E5%81%9C%E9%A1%BF"><span class="toc-number">2.3.</span> <span class="toc-text">2.2.3 减少流水线的停顿</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-1-%E7%A8%8B%E5%BA%8F%E7%9B%B8%E5%85%B3%E6%80%A7%E5%92%8C%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9B%B8%E5%85%B3"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.2.3.1 程序相关性和流水线相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-2-%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9B%B8%E5%85%B3%E7%9A%84%E7%A1%AE%E5%AE%9A"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.2.3.2 流水线相关的确定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-3-%E5%8C%96%E8%A7%A3%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9B%B8%E5%85%B3"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.2.3.3 化解流水线相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-4-%E9%80%9A%E8%BF%87%E5%AE%9A%E5%90%91%E8%B7%AF%E5%BE%84%E5%87%8F%E5%B0%91%E5%BC%80%E9%94%80"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.2.3.4 通过定向路径减少开销</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-5-%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%BA%92%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.3.5.</span> <span class="toc-text">2.2.3.5 流水线互锁的实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-%E4%BA%A7%E5%93%81%E5%8C%96%E7%9A%84%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">2.4.</span> <span class="toc-text">2.2.4 产品化的流水线处理器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-1-RISC%E5%AE%9E%E4%BE%8B"><span class="toc-number">2.4.1.</span> <span class="toc-text">2.2.4.1 RISC实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-2-CISC%E5%AE%9E%E4%BE%8B"><span class="toc-number">2.4.2.</span> <span class="toc-text">2.2.4.2 CISC实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-3-%E6%A0%87%E9%87%8F%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD"><span class="toc-number">2.4.3.</span> <span class="toc-text">2.2.4.3 标量流水线处理器的性能</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%B7%B1%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">2.3 深流水线处理器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">2.4 总结</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -340,11 +402,11 @@
     </li>
     <li class="copyright_update-time">
         <strong >最后更新：</strong>
-        <time datetime="2023-01-16T14:41:09.098Z" itemprop="dateUpdated">2023年01月16日 22:41:09</time>
+        <time datetime="2023-01-17T19:47:31.537Z" itemprop="dateUpdated">2023年01月18日 03:47:31</time>
     </li>
     <!-- 有需要的可以取消注释 -->
     <!-- <li class="copyright_article-titles"><strong >本文标题：</strong>
-    <a href="http://example.com/2023/01/16/超标量处理器基础学习笔记————第二章/" title="超标量处理器基础学习笔记————第一章" target="_blank">超标量处理器基础学习笔记————第一章</a>
+    <a href="http://example.com/2023/01/16/超标量处理器基础学习笔记————第二章/" title="超标量处理器基础学习笔记————第二章：流水线处理器" target="_blank">超标量处理器基础学习笔记————第二章：流水线处理器</a>
     </li>
     <li class="copyright_create-time">
     <strong>发布时间：</strong>

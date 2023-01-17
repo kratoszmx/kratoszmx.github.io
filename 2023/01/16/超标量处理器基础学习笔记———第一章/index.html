@@ -16,7 +16,7 @@
 <meta property="og:description" content="面试要用到这本书的一些内容：《现代处理器设计 超标量处理器基础》，网上相关学习笔记比较少，打算自己记录一下。参考课程：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1ZE4114764&#x2F;侵删。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2023-01-16T14:09:02.000Z">
-<meta property="article:modified_time" content="2023-01-17T05:11:01.353Z">
+<meta property="article:modified_time" content="2023-01-17T19:50:42.927Z">
 <meta property="article:author" content="MarkusChu">
 <meta property="article:tag" content="c&#x2F;c++,linux,爱折腾，好奇心强">
 <meta name="twitter:card" content="summary">
@@ -168,68 +168,68 @@
 <span id="more"></span>
 <hr>
 <p>摩尔定律：微处理器功不可没。</p>
-<p>微处理器是指令集处理器(ISP)。指令集至关重要&#x3D;&gt;ISA，软硬件接口。ISA是设计的规范，ISP是设计的实现。</p>
+<p>微处理器是指令集处理器(ISP)。指令集至关重要&#x3D;&#x3D;&gt;ISA，软硬件接口。ISA是设计的规范，ISP是设计的实现。</p>
 <p>体系结构指指令集体系结构（ISA），即指令集的规范，而微体系结构是指体系结构的具体逻辑实现，同一种指令集体系结构可以用不同的微体系结构，并采用不同的流水线设计，不同的分支预测算法等。微体系结构的多样性使得同一种体系结构能够不断地推陈出新，并利用新出现的微体系结果技术来提高微处理器的性能，同时又保持代码的兼容性。</p>
 <hr>
-<h2 id="微处理器的发展史"><a href="#微处理器的发展史" class="headerlink" title="微处理器的发展史"></a>微处理器的发展史</h2><p>第一块微处理器芯片Intel4004。</p>
+<h2 id="1-1-微处理器的发展史"><a href="#1-1-微处理器的发展史" class="headerlink" title="1.1 微处理器的发展史"></a>1.1 微处理器的发展史</h2><p>第一块微处理器芯片Intel4004。</p>
 <p>1980s：微处理器体系结构和微体系结构的发展时期。指令流水和快速cache缓存成为标准的微体系结构技术。</p>
 <p>1990s：为完全发挥微处理器的性能，深度流水技术和单周期多指令执行技术大受欢迎。<br>    出现了指令的乱序执行和分支预测技术，以避免或减少流水线的时钟周期数。</p>
 <p>预测未来：指令级并行将会扩展为包括线程级并行和储存级并行的技术。<br>    功耗将成为主要的性能障碍。</p>
 <hr>
-<h2 id="指令集处理器设计"><a href="#指令集处理器设计" class="headerlink" title="指令集处理器设计"></a>指令集处理器设计</h2><h3 id="数字系统设计"><a href="#数字系统设计" class="headerlink" title="数字系统设计"></a>数字系统设计</h3><p>设计始于规范。规范是一种行为描述：需要什么，它能做些什么。实现是一个结构描述：描述结果，它是如何构建的。</p>
+<h2 id="1-2-指令集处理器设计"><a href="#1-2-指令集处理器设计" class="headerlink" title="1.2 指令集处理器设计"></a>1.2 指令集处理器设计</h2><h3 id="1-2-1-数字系统设计"><a href="#1-2-1-数字系统设计" class="headerlink" title="1.2.1 数字系统设计"></a>1.2.1 数字系统设计</h3><p>设计始于规范。规范是一种行为描述：需要什么，它能做些什么。实现是一个结构描述：描述结果，它是如何构建的。</p>
 <p>设计过程的基本任务：综合和分析。综合试图找到基于规范的实现。分析检查一个实现，判断其是否和如何与规范保持一致。</p>
-<p>数字电路的设计：规范的制定相当严格，设计的优化依赖于强有力的软件工具。<br>组合逻辑电路的优化力图减少逻辑门的数量和逻辑间的级数。（组合逻辑的特点是任意时刻的输出仅仅取决于该时刻的输入，与电路原本的状态无关，逻辑中不牵涉跳变沿信号的处理）<br>时序电路设计的优化希望减少状态数及相关组合逻辑电路的复杂性。（其特点为任意时刻的输出不仅取决于该时刻的输入，而且还和电路原来的状态有关）<br>&#x3D;&gt;使逻辑最小化和状态最小化的软件工具必不可少。</p>
+<p>数字电路的设计：规范的制定相当严格，设计的优化依赖于强有力的软件工具。<br>组合逻辑电路的优化力图减少逻辑门的数量和逻辑间的级数。（组合逻辑的特点是任意时刻的输出仅仅取决于该时刻的输入，与电路原本的状态无关，逻辑中不牵涉跳变沿信号的处理）<br>时序电路设计的优化希望减少状态数及相关组合逻辑电路的复杂性。（其特点为任意时刻的输出不仅取决于该时刻的输入，而且还和电路原来的状态有关）<br>&#x3D;&#x3D;&gt;使逻辑最小化和状态最小化的软件工具必不可少。</p>
 <p>微处理器的设计：更加复杂。规范：ISA。实现：实际的硬件设计，用HDL描述。</p>
 <p>现代高端微处理器的设计：两个步骤，微体系结构设计和逻辑设计。RTL和HDL描述可以使用相同的描述语言。</p>
 <hr>
-<h3 id="体系结构、逻辑实现和物理实现"><a href="#体系结构、逻辑实现和物理实现" class="headerlink" title="体系结构、逻辑实现和物理实现"></a>体系结构、逻辑实现和物理实现</h3><p>体系结构规定了处理器的功能性行为，逻辑实现是实现体系结构的逻辑结构和组织，物理实现是逻辑实现的物理结构和具体表现形式。</p>
+<h3 id="1-2-2-体系结构、逻辑实现和物理实现"><a href="#1-2-2-体系结构、逻辑实现和物理实现" class="headerlink" title="1.2.2 体系结构、逻辑实现和物理实现"></a>1.2.2 体系结构、逻辑实现和物理实现</h3><p>体系结构规定了处理器的功能性行为，逻辑实现是实现体系结构的逻辑结构和组织，物理实现是逻辑实现的物理结构和具体表现形式。</p>
 <p>体系结构对指令集处理器的指令集合进行说明。为了能被处理器执行，所有的软件都必须与指令集匹配、或者用该指令集进行编码。每个程序都被编译成这个指令集的一个指令序列。</p>
 <p>逻辑实现就是体系结构的具体设计，也称为微体系结构。某种体系结构在它的ISA生命周期内可以有许多逻辑实现。对于在这个ISA上编写的任何程序，同一体系结构的所有逻辑实现都可以执行。与逻辑实现相关的一些概念包括流水线设计、cache存储器和分支预测器。</p>
 <p>物理实现是设计的具体物理表现形式，通常是单芯片或多芯片的封装。对于一个逻辑实现，可以有许多不同的物理实现，按时钟频率、cache存储器容量、总线接口、结构技术及封装等方面的差异而具有不同的形式。</p>
 <hr>
-<h3 id="ISA和DSI"><a href="#ISA和DSI" class="headerlink" title="ISA和DSI"></a>ISA和DSI</h3><p>1.指令集体系结构将软件与硬件或者程序与处理器之间的开发独立开来。程序可以根据ISA的规定进行开发，而不理会实际机器的实现细节，反之亦然。ISA较少重新编译和开发，对于新出现的ISA，开发与其相配套的编译器和操作系统将需要花费10年以上的时间。ISA存在的时间越长，基于这个ISA的软件应用基础将越大，将来取代这个ISA的困难就越大。</p>
+<h3 id="1-2-3-ISA和DSI"><a href="#1-2-3-ISA和DSI" class="headerlink" title="1.2.3 ISA和DSI"></a>1.2.3 ISA和DSI</h3><p>1.指令集体系结构将软件与硬件或者程序与处理器之间的开发独立开来。程序可以根据ISA的规定进行开发，而不理会实际机器的实现细节，反之亦然。ISA较少重新编译和开发，对于新出现的ISA，开发与其相配套的编译器和操作系统将需要花费10年以上的时间。ISA存在的时间越长，基于这个ISA的软件应用基础将越大，将来取代这个ISA的困难就越大。</p>
 <p>2.ISA是微处理器设计的规范，所有的实现必须满足这个规范并支持ISA规定的功能。相反，微体系结构的发展非常迅速。</p>
 <p>3.每个ISA中有个内在的接口（动态－静态接口DSI，Dynamic-Static Interface）定义，区别哪些是在编译时静态完成的，哪些时在运行时动态完成的。通常所有在编译时由软件和编译器静态完成的人物和优化，在DSI之上。相反，所有在运行是由硬件动态完成的任务以及优化，认为是在DSI之下。所有的体系结构的特性都在ISA中规定，因此都处于静态区域。处于DSI之上的软件和DSI之下的微体系结构的是相互独立的。</p>
 <p>4、ISA 设计中的关键问题是DSI放置的位置，DSI可以将高级语言编写的应用程序与底层机器的实际硬件放置到不同的抽象层次。可以通过编译器优化DSI上的内容，或者在微体系结构中优化DSI下的内容。（例如精简指令集的DSI位置放的比复杂指令集CISC更低，希望更多的通过运行DSI上的编译器完成优化，减小硬件复杂度，从而获得更快的机器速度。</p>
 <p>5、缺点：ISA不断发展的过程中加入了许多新的特性，可以将以前的实现特征提升到体系结构的层次，将某些原始的微体系结构特征暴露给软件，有助于编译器的优化，从而减小硬件复杂度，DSI的位置降低。这些特征成为ISA的一部分，则未来的实现必须满足这部分特征规范。但是随着硬件的发展，这些陈旧的特征可能低效过时，从而不利于性能提升，因此体系结构和微体系结构必须严格分离。理想情况下ISA应只包含表达功能或者软件算法语义所必须的特征，而不管那些优化程序性能的所有特征应该归入实现还是归入微体系结构领域。</p>
 <p>6、不同的类型的ISA的不同点集中在如何定义操作数类型以及操作数上。</p>
 <hr>
-<h2 id="处理器性能法则"><a href="#处理器性能法则" class="headerlink" title="处理器性能法则"></a>处理器性能法则</h2><h3 id="处理器性能公式"><a href="#处理器性能公式" class="headerlink" title="处理器性能公式"></a>处理器性能公式</h3><p>处理器性能是根据执行一段特殊代码所需要的时间来衡量的（时间&#x2F;程序， Time&#x2F;Program），又可分为三项</p>
+<h2 id="1-3-处理器性能法则"><a href="#1-3-处理器性能法则" class="headerlink" title="1.3 处理器性能法则"></a>1.3 处理器性能法则</h2><h3 id="1-3-1-处理器性能公式"><a href="#1-3-1-处理器性能公式" class="headerlink" title="1.3.1 处理器性能公式"></a>1.3.1 处理器性能公式</h3><p>处理器性能是根据执行一段特殊代码所需要的时间来衡量的（时间&#x2F;程序， Time&#x2F;Program），又可分为三项</p>
 <p>（1）指令数：特定程序需要执行的动态指令的数目；</p>
 <p>（2）平均执行每条指令需要耗费多少个时钟周期，用CPI（Cycles Per Instruction）表示；</p>
 <p>（3）机器的时钟周期，每个时钟周期需要的时间</p>
 <p>可减少任一项来提升性能，但上述不是相互独立的，性能的提升需要权衡和折中。</p>
-<h3 id="处理器性能优化"><a href="#处理器性能优化" class="headerlink" title="处理器性能优化"></a>处理器性能优化</h3><p>只减少时钟周期可能不会引起其他两项的变化。</p>
+<h3 id="1-3-2-处理器性能优化"><a href="#1-3-2-处理器性能优化" class="headerlink" title="1.3.2 处理器性能优化"></a>1.3.2 处理器性能优化</h3><p>只减少时钟周期可能不会引起其他两项的变化。</p>
 <p>减少时钟周期的关键技术是流水线技术。<br>当流水下深度增加时，CPI可能会上升：<br>1、取指和执行之间的流水级数会增加，从而增加了分支预测错误时的开销<br>2、如果流水线长到连基本的ALU操作也需要多个时钟周期，那么即便通过结果定向硬件，在两条相关指令之间所必须等待时间也需要多个时钟周期<br>3、当时钟周期随着流水线深度而增加时，存储器的延迟（以时钟周期数目计）将会明显增加，从而增加存储操作的平均延迟<br>4、在流水线中有硬件和延迟的开销，会减少在性能上的收益。</p>
-<h3 id="性能评价方法"><a href="#性能评价方法" class="headerlink" title="性能评价方法"></a>性能评价方法</h3><p>功能仿真器：模拟体系结构的机器，用于验证程序能否被正确执行。</p>
+<h3 id="1-3-3-性能评价方法"><a href="#1-3-3-性能评价方法" class="headerlink" title="1.3.3 性能评价方法"></a>1.3.3 性能评价方法</h3><p>功能仿真器：模拟体系结构的机器，用于验证程序能否被正确执行。</p>
 <p>性能仿真器：模拟微体系架构，测量执行一个程序所需要的时钟周期的数目。</p>
 <p>性能仿真器可分为路径驱动和执行驱动。</p>
 <hr>
-<h2 id="指令集并行处理"><a href="#指令集并行处理" class="headerlink" title="指令集并行处理"></a>指令集并行处理</h2><p>指令集并行处理可认为多条指令并行执行。串行处理一次执行一条指令，下一条指令执行之前上一条指令必须完成。</p>
+<h2 id="1-4-指令集并行处理"><a href="#1-4-指令集并行处理" class="headerlink" title="1.4 指令集并行处理"></a>1.4 指令集并行处理</h2><p>指令集并行处理可认为多条指令并行执行。串行处理一次执行一条指令，下一条指令执行之前上一条指令必须完成。</p>
 <p>流水线处理器可重叠执行多条指令，若每个周期都有一条新的指令进入流水线，虽然每条指令的处理时间与串行的相同，但是多条指令的重叠可以让平均CPI降低到接近1。</p>
 <p>标量处理器每个时钟周期至多只能取出一条指令并进行发射，超标量处理器则可以在每个时钟周期取出多条指令进行发射。CPI 小于1或者IPC大于1的处理器称为超标量处理器。</p>
-<h3 id="从标量到超标量"><a href="#从标量到超标量" class="headerlink" title="从标量到超标量"></a>从标量到超标量</h3><h4 id="处理器性能"><a href="#处理器性能" class="headerlink" title="处理器性能"></a>处理器性能</h4><p>改写公式1.1如下：<br>指令数由ISA、编译器和操作系统共同决定。ISA每条指令的完成工作量对指令总数由影响，编译器效率、程序执行过程中，应用程序对操作系统的功能调用将增加执行的指令总数。</p>
+<h3 id="1-4-1-从标量到超标量"><a href="#1-4-1-从标量到超标量" class="headerlink" title="1.4.1 从标量到超标量"></a>1.4.1 从标量到超标量</h3><h4 id="1-4-1-1-处理器性能"><a href="#1-4-1-1-处理器性能" class="headerlink" title="1.4.1.1 处理器性能"></a>1.4.1.1 处理器性能</h4><p>改写公式1.1如下：<br>指令数由ISA、编译器和操作系统共同决定。ISA每条指令的完成工作量对指令总数由影响，编译器效率、程序执行过程中，应用程序对操作系统的功能调用将增加执行的指令总数。</p>
 <p>平均IPC反应处理器达到的平均指令吞吐率。</p>
 <p>减少流水线中每一段的逻辑门的级数、同时增加流水线的级数能提高时钟频率。为了获得很高的IPC，流水线必须设计的很宽，以便每一段中可以同时处理多条指令。流水线的加宽增加了硬件的复杂度，增加了流水线各段之间的信号传播延迟。因此在一个更宽的流水线中，为了维持相同的频率，流水线需要加深，这就需要在流水线究竟是要加宽还是要加深的选择中进行复杂的权衡。</p>
-<h4 id="并行处理器性能"><a href="#并行处理器性能" class="headerlink" title="并行处理器性能"></a>并行处理器性能</h4><p>Amdahl定律&#x3D;&gt;串行瓶颈：执行串行部分的时间即执行标量计算的所需的时间限制了通过开发并行性所获得的性能提高。</p>
-<h4 id="流水线处理器性能"><a href="#流水线处理器性能" class="headerlink" title="流水线处理器性能"></a>流水线处理器性能</h4><p>三个阶段：填充，充满和排空。（假设流水线未中断）理解两张图。</p>
+<h4 id="1-4-1-2-并行处理器性能"><a href="#1-4-1-2-并行处理器性能" class="headerlink" title="1.4.1.2 并行处理器性能"></a>1.4.1.2 并行处理器性能</h4><p>Amdahl定律&#x3D;&#x3D;&gt;串行瓶颈：执行串行部分的时间即执行标量计算的所需的时间限制了通过开发并行性所获得的性能提高。</p>
+<h4 id="1-4-1-3-流水线处理器性能"><a href="#1-4-1-3-流水线处理器性能" class="headerlink" title="1.4.1.3 流水线处理器性能"></a>1.4.1.3 流水线处理器性能</h4><p>三个阶段：填充，充满和排空。（假设流水线未中断）理解两张图。</p>
 <p>和并行处理器的串行瓶颈一样，停顿周期也是流水线处理器的关键问题。（停顿的流水线相当于串行）</p>
 <p>可以使用定向路径来消除停顿产生的阻塞。</p>
-<h4 id="超标量方案"><a href="#超标量方案" class="headerlink" title="超标量方案"></a>超标量方案</h4><p>设计超标量处理器的一个主要动机：开发可以获得一定（相对于向量来说较低）级别的并行度的通用处理器。目的是确保大部分程序都能够获得一定程度的指令级并行，以减轻顺序执行时瓶颈所产生的影响。</p>
-<h3 id="指令级并行（ILP）的极限"><a href="#指令级并行（ILP）的极限" class="headerlink" title="指令级并行（ILP）的极限"></a>指令级并行（ILP）的极限</h3><p>指令级并行可以称为细粒度并行，粗粒度指程序段或者计算任务之间的并行。</p>
-<h4 id="Flynn瓶颈"><a href="#Flynn瓶颈" class="headerlink" title="Flynn瓶颈"></a>Flynn瓶颈</h4><p>大多数程序的ILP小于2（基本块内部）</p>
-<h4 id="Fisher的乐观估计"><a href="#Fisher的乐观估计" class="headerlink" title="Fisher的乐观估计"></a>Fisher的乐观估计</h4><p>在许多程序中，几乎拥有无限的ILP</p>
-<h4 id="作用因素"><a href="#作用因素" class="headerlink" title="作用因素"></a>作用因素</h4><p>测试程序，机器模型，编译技术。</p>
-<h3 id="指令级并行的机器"><a href="#指令级并行的机器" class="headerlink" title="指令级并行的机器"></a>指令级并行的机器</h3><p>操作延迟（OL）：指一条指令产生结果后使用的机器时钟周期数，就是指令执行时所需要的时钟周期数</p>
+<h4 id="1-4-1-4-超标量方案"><a href="#1-4-1-4-超标量方案" class="headerlink" title="1.4.1.4 超标量方案"></a>1.4.1.4 超标量方案</h4><p>设计超标量处理器的一个主要动机：开发可以获得一定（相对于向量来说较低）级别的并行度的通用处理器。目的是确保大部分程序都能够获得一定程度的指令级并行，以减轻顺序执行时瓶颈所产生的影响。</p>
+<h3 id="1-4-2-指令级并行（ILP）的极限"><a href="#1-4-2-指令级并行（ILP）的极限" class="headerlink" title="1.4.2 指令级并行（ILP）的极限"></a>1.4.2 指令级并行（ILP）的极限</h3><p>指令级并行可以称为细粒度并行，粗粒度指程序段或者计算任务之间的并行。</p>
+<h4 id="1-4-2-1-Flynn瓶颈"><a href="#1-4-2-1-Flynn瓶颈" class="headerlink" title="1.4.2.1 Flynn瓶颈"></a>1.4.2.1 Flynn瓶颈</h4><p>大多数程序的ILP小于2（基本块内部）</p>
+<h4 id="1-4-2-2-Fisher的乐观估计"><a href="#1-4-2-2-Fisher的乐观估计" class="headerlink" title="1.4.2.2 Fisher的乐观估计"></a>1.4.2.2 Fisher的乐观估计</h4><p>在许多程序中，几乎拥有无限的ILP</p>
+<h4 id="1-4-2-3-作用因素"><a href="#1-4-2-3-作用因素" class="headerlink" title="1.4.2.3 作用因素"></a>1.4.2.3 作用因素</h4><p>测试程序，机器模型，编译技术。</p>
+<h3 id="1-4-3-指令级并行的机器"><a href="#1-4-3-指令级并行的机器" class="headerlink" title="1.4.3 指令级并行的机器"></a>1.4.3 指令级并行的机器</h3><p>操作延迟（OL）：指一条指令产生结果后使用的机器时钟周期数，就是指令执行时所需要的时钟周期数</p>
 <p>机器并行度（MP）：指机器支持的可以同时执行的最大指令数目</p>
 <p>发射延迟（IL）：指发射两条连续的指令之间所需要的机器时钟周期数。此时发射是指一条新的指令初始化后进入流水线</p>
 <p>发射并行度（IP）：指每个时钟周期内可以发射的最大指令数</p>
 <p>基准标量流水线处理器：OL  &#x3D; 1， MP &#x3D; 4， IL &#x3D; 1， IP &#x3D; 1</p>
-<h4 id="超流水处理器"><a href="#超流水处理器" class="headerlink" title="超流水处理器"></a>超流水处理器</h4><p>OL&#x3D;1,MP&#x3D;mxk,IL&#x3D;1&#x2F;m,IP&#x3D;m。</p>
+<h4 id="1-4-3-1-超流水处理器"><a href="#1-4-3-1-超流水处理器" class="headerlink" title="1.4.3.1 超流水处理器"></a>1.4.3.1 超流水处理器</h4><p>OL&#x3D;1,MP&#x3D;mxk,IL&#x3D;1&#x2F;m,IP&#x3D;m。</p>
 <p>比基准处理器有着更高的流水度，处理器的时钟周期比基准处理器短并定义为次时钟周期。每条指令的结果不能被后续m-1条指令所利用。</p>
 <p>与流水线区别的原因：以时钟周期执行的操作是原子操作，不可拆分。</p>
-<h4 id="超标量处理器"><a href="#超标量处理器" class="headerlink" title="超标量处理器"></a>超标量处理器</h4><p>OL&#x3D;1,MP&#x3D;nxk,IL&#x3D;1,IP&#x3D;n。</p>
-<h4 id="超长指令字处理器"><a href="#超长指令字处理器" class="headerlink" title="超长指令字处理器"></a>超长指令字处理器</h4><p>与超标量处理器的区别在于动态静态界面DSI的位置，超标量处理器中，运行时决定某n条指令发射到执行段，而超长指令字是在编译时进行的，编译器决定哪n条指令被同时发射到执行段，并将这n条指令作为一个超长指令字存放到程序储存器中。</p>
+<h4 id="1-4-3-2-超标量处理器"><a href="#1-4-3-2-超标量处理器" class="headerlink" title="1.4.3.2 超标量处理器"></a>1.4.3.2 超标量处理器</h4><p>OL&#x3D;1,MP&#x3D;nxk,IL&#x3D;1,IP&#x3D;n。</p>
+<h4 id="1-4-3-3-超长指令字处理器"><a href="#1-4-3-3-超长指令字处理器" class="headerlink" title="1.4.3.3 超长指令字处理器"></a>1.4.3.3 超长指令字处理器</h4><p>与超标量处理器的区别在于动态静态界面DSI的位置，超标量处理器中，运行时决定某n条指令发射到执行段，而超长指令字是在编译时进行的，编译器决定哪n条指令被同时发射到执行段，并将这n条指令作为一个超长指令字存放到程序储存器中。</p>
 
       
 
@@ -328,9 +328,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%89%E7%AB%A0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          超标量处理器基础学习笔记————第三章
+        
+      </div>
+    </a>
+  
   
     <a href="/2023/01/16/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%BA%8C%E7%AB%A0/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">超标量处理器基础学习笔记————第一章</div>
+      <div class="article-nav-title">超标量处理器基础学习笔记————第二章：流水线处理器</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -361,7 +370,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E5%8F%91%E5%B1%95%E5%8F%B2"><span class="toc-number">1.</span> <span class="toc-text">微处理器的发展史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">指令集处理器设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%97%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text">数字系统设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E9%80%BB%E8%BE%91%E5%AE%9E%E7%8E%B0%E5%92%8C%E7%89%A9%E7%90%86%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">体系结构、逻辑实现和物理实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ISA%E5%92%8CDSI"><span class="toc-number">2.3.</span> <span class="toc-text">ISA和DSI</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD%E6%B3%95%E5%88%99"><span class="toc-number">3.</span> <span class="toc-text">处理器性能法则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD%E5%85%AC%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">处理器性能公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">处理器性能优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E8%AF%84%E4%BB%B7%E6%96%B9%E6%B3%95"><span class="toc-number">3.3.</span> <span class="toc-text">性能评价方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">指令集并行处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E6%A0%87%E9%87%8F%E5%88%B0%E8%B6%85%E6%A0%87%E9%87%8F"><span class="toc-number">4.1.</span> <span class="toc-text">从标量到超标量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD"><span class="toc-number">4.1.1.</span> <span class="toc-text">处理器性能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD"><span class="toc-number">4.1.2.</span> <span class="toc-text">并行处理器性能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD"><span class="toc-number">4.1.3.</span> <span class="toc-text">流水线处理器性能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B6%85%E6%A0%87%E9%87%8F%E6%96%B9%E6%A1%88"><span class="toc-number">4.1.4.</span> <span class="toc-text">超标量方案</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C%EF%BC%88ILP%EF%BC%89%E7%9A%84%E6%9E%81%E9%99%90"><span class="toc-number">4.2.</span> <span class="toc-text">指令级并行（ILP）的极限</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Flynn%E7%93%B6%E9%A2%88"><span class="toc-number">4.2.1.</span> <span class="toc-text">Flynn瓶颈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fisher%E7%9A%84%E4%B9%90%E8%A7%82%E4%BC%B0%E8%AE%A1"><span class="toc-number">4.2.2.</span> <span class="toc-text">Fisher的乐观估计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E5%9B%A0%E7%B4%A0"><span class="toc-number">4.2.3.</span> <span class="toc-text">作用因素</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C%E7%9A%84%E6%9C%BA%E5%99%A8"><span class="toc-number">4.3.</span> <span class="toc-text">指令级并行的机器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B6%85%E6%B5%81%E6%B0%B4%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">4.3.1.</span> <span class="toc-text">超流水处理器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">4.3.2.</span> <span class="toc-text">超标量处理器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B6%85%E9%95%BF%E6%8C%87%E4%BB%A4%E5%AD%97%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">4.3.3.</span> <span class="toc-text">超长指令字处理器</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E5%8F%91%E5%B1%95%E5%8F%B2"><span class="toc-number">1.</span> <span class="toc-text">1.1 微处理器的发展史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%8C%87%E4%BB%A4%E9%9B%86%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">1.2 指令集处理器设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-%E6%95%B0%E5%AD%97%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 数字系统设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E3%80%81%E9%80%BB%E8%BE%91%E5%AE%9E%E7%8E%B0%E5%92%8C%E7%89%A9%E7%90%86%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">1.2.2 体系结构、逻辑实现和物理实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3-ISA%E5%92%8CDSI"><span class="toc-number">2.3.</span> <span class="toc-text">1.2.3 ISA和DSI</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD%E6%B3%95%E5%88%99"><span class="toc-number">3.</span> <span class="toc-text">1.3 处理器性能法则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1-%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD%E5%85%AC%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">1.3.1 处理器性能公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">1.3.2 处理器性能优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-%E6%80%A7%E8%83%BD%E8%AF%84%E4%BB%B7%E6%96%B9%E6%B3%95"><span class="toc-number">3.3.</span> <span class="toc-text">1.3.3 性能评价方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E6%8C%87%E4%BB%A4%E9%9B%86%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">1.4 指令集并行处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-1-%E4%BB%8E%E6%A0%87%E9%87%8F%E5%88%B0%E8%B6%85%E6%A0%87%E9%87%8F"><span class="toc-number">4.1.</span> <span class="toc-text">1.4.1 从标量到超标量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-1-%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD"><span class="toc-number">4.1.1.</span> <span class="toc-text">1.4.1.1 处理器性能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-2-%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD"><span class="toc-number">4.1.2.</span> <span class="toc-text">1.4.1.2 并行处理器性能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-3-%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%A4%84%E7%90%86%E5%99%A8%E6%80%A7%E8%83%BD"><span class="toc-number">4.1.3.</span> <span class="toc-text">1.4.1.3 流水线处理器性能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-4-%E8%B6%85%E6%A0%87%E9%87%8F%E6%96%B9%E6%A1%88"><span class="toc-number">4.1.4.</span> <span class="toc-text">1.4.1.4 超标量方案</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-2-%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C%EF%BC%88ILP%EF%BC%89%E7%9A%84%E6%9E%81%E9%99%90"><span class="toc-number">4.2.</span> <span class="toc-text">1.4.2 指令级并行（ILP）的极限</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-1-Flynn%E7%93%B6%E9%A2%88"><span class="toc-number">4.2.1.</span> <span class="toc-text">1.4.2.1 Flynn瓶颈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-2-Fisher%E7%9A%84%E4%B9%90%E8%A7%82%E4%BC%B0%E8%AE%A1"><span class="toc-number">4.2.2.</span> <span class="toc-text">1.4.2.2 Fisher的乐观估计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-3-%E4%BD%9C%E7%94%A8%E5%9B%A0%E7%B4%A0"><span class="toc-number">4.2.3.</span> <span class="toc-text">1.4.2.3 作用因素</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-3-%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C%E7%9A%84%E6%9C%BA%E5%99%A8"><span class="toc-number">4.3.</span> <span class="toc-text">1.4.3 指令级并行的机器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-3-1-%E8%B6%85%E6%B5%81%E6%B0%B4%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">4.3.1.</span> <span class="toc-text">1.4.3.1 超流水处理器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-3-2-%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">4.3.2.</span> <span class="toc-text">1.4.3.2 超标量处理器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-3-3-%E8%B6%85%E9%95%BF%E6%8C%87%E4%BB%A4%E5%AD%97%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">4.3.3.</span> <span class="toc-text">1.4.3.3 超长指令字处理器</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -397,7 +406,7 @@
     </li>
     <li class="copyright_update-time">
         <strong >最后更新：</strong>
-        <time datetime="2023-01-17T05:11:01.353Z" itemprop="dateUpdated">2023年01月17日 13:11:01</time>
+        <time datetime="2023-01-17T19:50:42.927Z" itemprop="dateUpdated">2023年01月18日 03:50:42</time>
     </li>
     <!-- 有需要的可以取消注释 -->
     <!-- <li class="copyright_article-titles"><strong >本文标题：</strong>
