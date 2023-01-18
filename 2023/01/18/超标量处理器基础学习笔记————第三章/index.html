@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>超标量处理器基础学习笔记————第三章 | MarkusChu的博客</title>
+  <title>超标量处理器基础学习笔记————第三章:超标量结构 | MarkusChu的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="毕业于北京航空航天大学，在此记录我的转行历程">
+  <meta name="description" content="超标量处理器的本质特点是：1、能够同时发射多条指令，进一步提升处理器的指令处理能力2、支持指令“乱序执行”，当指令由于相关性而被阻塞时可以从后续指令中找出不相关的指令进行执行">
 <meta property="og:type" content="article">
-<meta property="og:title" content="超标量处理器基础学习笔记————第三章">
+<meta property="og:title" content="超标量处理器基础学习笔记————第三章:超标量结构">
 <meta property="og:url" content="http://example.com/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%89%E7%AB%A0/index.html">
 <meta property="og:site_name" content="MarkusChu的博客">
-<meta property="og:description" content="毕业于北京航空航天大学，在此记录我的转行历程">
+<meta property="og:description" content="超标量处理器的本质特点是：1、能够同时发射多条指令，进一步提升处理器的指令处理能力2、支持指令“乱序执行”，当指令由于相关性而被阻塞时可以从后续指令中找出不相关的指令进行执行">
 <meta property="og:locale">
 <meta property="article:published_time" content="2023-01-17T19:51:04.000Z">
-<meta property="article:modified_time" content="2023-01-17T19:51:04.403Z">
+<meta property="article:modified_time" content="2023-01-18T06:36:24.841Z">
 <meta property="article:author" content="MarkusChu">
 <meta property="article:tag" content="c&#x2F;c++,linux,爱折腾，好奇心强">
 <meta name="twitter:card" content="summary">
@@ -150,7 +150,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      超标量处理器基础学习笔记————第三章
+      超标量处理器基础学习笔记————第三章:超标量结构
     </h1>
   
 
@@ -164,7 +164,39 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>超标量处理器的本质特点是：<br>1、能够同时发射多条指令，进一步提升处理器的指令处理能力<br>2、支持指令“乱序执行”，当指令由于相关性而被阻塞时可以从后续指令中找出不相关的指令进行执行</p>
+<span id="more"></span>
+<hr>
+<h2 id="3-1-标量流水线的局限性"><a href="#3-1-标量流水线的局限性" class="headerlink" title="3.1 标量流水线的局限性"></a>3.1 标量流水线的局限性</h2><p>1、标量流水线最大的吞吐率不会超过每周期1条指令<br>&#x3D;&#x3D;&gt;超标量的解决方法：每个时钟周期启动多条指令执行，并行流水线</p>
+<p>2、将不同类型的指令放在一条流水线中进行处理，效率低下<br>&#x3D;&#x3D;&gt;超标量的解决方法：多配置流水线、多记录缓冲技术</p>
+<p>3、为了保证流水线的步调一致而插入的停顿使流水线产生很多气泡<br>&#x3D;&#x3D;&gt;超标量的解决方法：动态流水线</p>
+<p>1、并行流水线：同一周期启动多条指令执行，增加了流水线的宽度</p>
+<p>2、多配置流水线：在流水线的执行阶段为不同类型的指令提供不同的执行部件（子流水线）</p>
+<p>3、超标量流水线：属于并行流水线，也属于多配置流水线，可以采用动态流水线技术。</p>
+<p>4、动态流水线：支持乱序执行的并行流水线。动态流水线通过使用复杂的多记录缓冲来实现乱序执行，并允许指令以可变的顺序进入和离开缓冲。</p>
+<h3 id="3-1-1-标量流水线吞吐率的上限"><a href="#3-1-1-标量流水线吞吐率的上限" class="headerlink" title="3.1.1 标量流水线吞吐率的上限"></a>3.1.1 标量流水线吞吐率的上限</h3><p>深流水线通过减少每段逻辑门级数来降低时钟周期。</p>
+<h3 id="3-1-2-低效的统一流水线"><a href="#3-1-2-低效的统一流水线" class="headerlink" title="3.1.2 低效的统一流水线"></a>3.1.2 低效的统一流水线</h3><h3 id="3-1-3-严格流水线导致的性能损失"><a href="#3-1-3-严格流水线导致的性能损失" class="headerlink" title="3.1.3 严格流水线导致的性能损失"></a>3.1.3 严格流水线导致的性能损失</h3><h2 id="3-2-从标量流水线到超标量流水线"><a href="#3-2-从标量流水线到超标量流水线" class="headerlink" title="3.2 从标量流水线到超标量流水线"></a>3.2 从标量流水线到超标量流水线</h2><h3 id="3-2-1-并行流水线"><a href="#3-2-1-并行流水线" class="headerlink" title="3.2.1 并行流水线"></a>3.2.1 并行流水线</h3><p>相对于标量流水线来计算，它取决于并行流水线的宽度。</p>
+<h3 id="3-2-2-多配置流水线"><a href="#3-2-2-多配置流水线" class="headerlink" title="3.2.2 多配置流水线"></a>3.2.2 多配置流水线</h3><p>优点：每条流水线只执行一种指令，因此可以根据其特点进行专门的优化设计并采用高效的硬件实现。每条指令只需要执行必要的延迟并流过该子流水线的所有段。</p>
+<h3 id="3-2-3-动态流水线"><a href="#3-2-3-动态流水线" class="headerlink" title="3.2.3 动态流水线"></a>3.2.3 动态流水线</h3><p>分派缓冲和再定序缓冲</p>
+<h2 id="3-3-超标量流水线综述"><a href="#3-3-超标量流水线综述" class="headerlink" title="3.3 超标量流水线综述"></a>3.3 超标量流水线综述</h2><p>TEM6级流水线：取指，译码，分派，执行，完成和提交</p>
+<h3 id="3-3-1-取指"><a href="#3-3-1-取指" class="headerlink" title="3.3.1 取指"></a>3.3.1 取指</h3><p>指令cache在物理组织上要足够宽，每行要能存储s条指令来满足流水线的一次取操作。</p>
+<p>取指段的设计目标就是增大取指段的宽度；<br>主要障碍：<br>1、读取的s条指令没有对齐，这和指令cache的物理组织有关；<br>2、控制流改变了取指集中的指令。</p>
+<p>对齐问题的解决方法：</p>
+<p>1、编译时使用静态技术，编译器了解指令cache的组织结构，在存储器中就实现行对齐。<br>导致的问题：目标代码调入到不同组织的I-cache中时可能会发生不对齐的情况，静态代码占据了大范围的地址，降低了cache命中率。<br>2、执行时由硬件协助解决，即使指令组跨越阵列行边界，对齐硬件也能保证一个周期内取出s条指令。</p>
+<h3 id="3-3-2-指令译码"><a href="#3-3-2-指令译码" class="headerlink" title="3.3.2 指令译码"></a>3.3.2 指令译码</h3><p>指令译码主要包括指令的识别、指令类型的确定以及指令间相关性的检测。</p>
+<p>指令译码的复杂度受两个因素影响：ISA和并行流水线的宽度。</p>
+<p>RISC中，译码段将成为超标量流水线中的关键路径</p>
+<p>预译码：将指令译码的部分工作转移到指令cache进行，当cache失效并需要从存储器调入一个cache块时，在内存与cache之间可以增加一个硬件将cache块中的指令进行预译码。译码的信息以预译码标识位的形式连同指令一起存在于指令cache中，在指令译码时简化操作。<br>在CISC和RISC中均可以使用。<br>预译码对处理器设计的两个主要影响：<br>1、由于在存储器到指令cache的通路上增加了预译码操作而增加了指令cache的失效开销<br>2、cache的大小由于存储预译码标识位而增大</p>
+<h3 id="3-3-3-指令分派"><a href="#3-3-3-指令分派" class="headerlink" title="3.3.3 指令分派"></a>3.3.3 指令分派</h3><p>超标量属于多配置流水线，其执行段使用了很多不同类型的执行部件，不同类型的指令需要在不同的执行部件上执行，因此存在分派阶段，确定指令应该在哪一个执行部件上执行。</p>
+<p>保留站将指令译码和执行加以分离，从而平衡了译码段以及执行段吞吐率的频繁变化，消除了译码段不必要的停顿，同时也为执行部件输送足够的指令。</p>
+<p>集中式保留站：可以被各种类型的指令共用，使用率较高，但是硬件设计非常复杂，需要集中控制并且要设置多个端口来满足多个部件的同时访问<br>分布式保留站：只需要一个端口和少数几条记录项，硬件简单，但是总的利用率低。当一种类型的保留站中各记录项都被占用时，所有这种类型的后续指令都必须停顿。<br>二者结合称为分组保留站</p>
+<p>发射和分派：在分布式保留站中，分派是指译码后指令同相应类型的功能部件之间的连接；而发射是指指令在功能部件中执行的初始化。在集中式保留站中，两个可以互用。</p>
+<h3 id="3-3-4-指令执行"><a href="#3-3-4-指令执行" class="headerlink" title="3.3.4 指令执行"></a>3.3.4 指令执行</h3><p>超标量流水线的核心。</p>
+<p>设置多个功能部件时一种空间并行性的体现；功能部件流水化实现时时间并行性的体现。为避免结构相关造成的处理器停顿，功能部件的数目要大于流水线的数目。</p>
+<h3 id="3-3-5-指令的完成和提交"><a href="#3-3-5-指令的完成和提交" class="headerlink" title="3.3.5 指令的完成和提交"></a>3.3.5 指令的完成和提交</h3><p>超标量流水线的基本结构：前端是顺序执行，执行段（保留站和再定序缓冲之间）式乱序执行，后端是顺序提交。</p>
+<p>本书中对指令的完成的定义是得到指令结果并写入处理器的物理寄存器中；指令提交的定义是得到指令结果并写入到对应的存储器中。即完成是更新处理器状态，提交是更新存储器状态。</p>
+<p>指令发生异常时应该能够把当前机器的体系结构和状态保存起来，异常处理完毕后再恢复指令的执行。机器这种能以单条指令的粒度挂起和重启程序的能力称为精确异常。即使程序在乱序执行，机器状态的保存也要满足顺序性。</p>
+
       
 
       
@@ -295,7 +327,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%A0%87%E9%87%8F%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">3.1 标量流水线的局限性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-1-%E6%A0%87%E9%87%8F%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%90%9E%E5%90%90%E7%8E%87%E7%9A%84%E4%B8%8A%E9%99%90"><span class="toc-number">1.1.</span> <span class="toc-text">3.1.1 标量流水线吞吐率的上限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-2-%E4%BD%8E%E6%95%88%E7%9A%84%E7%BB%9F%E4%B8%80%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">1.2.</span> <span class="toc-text">3.1.2 低效的统一流水线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-3-%E4%B8%A5%E6%A0%BC%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%AF%BC%E8%87%B4%E7%9A%84%E6%80%A7%E8%83%BD%E6%8D%9F%E5%A4%B1"><span class="toc-number">1.3.</span> <span class="toc-text">3.1.3 严格流水线导致的性能损失</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E4%BB%8E%E6%A0%87%E9%87%8F%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%88%B0%E8%B6%85%E6%A0%87%E9%87%8F%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">2.</span> <span class="toc-text">3.2 从标量流水线到超标量流水线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-%E5%B9%B6%E8%A1%8C%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">2.1.</span> <span class="toc-text">3.2.1 并行流水线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-%E5%A4%9A%E9%85%8D%E7%BD%AE%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">2.2.</span> <span class="toc-text">3.2.2 多配置流水线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3-%E5%8A%A8%E6%80%81%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">2.3.</span> <span class="toc-text">3.2.3 动态流水线</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E8%B6%85%E6%A0%87%E9%87%8F%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%BB%BC%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">3.3 超标量流水线综述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-1-%E5%8F%96%E6%8C%87"><span class="toc-number">3.1.</span> <span class="toc-text">3.3.1 取指</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2-%E6%8C%87%E4%BB%A4%E8%AF%91%E7%A0%81"><span class="toc-number">3.2.</span> <span class="toc-text">3.3.2 指令译码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-3-%E6%8C%87%E4%BB%A4%E5%88%86%E6%B4%BE"><span class="toc-number">3.3.</span> <span class="toc-text">3.3.3 指令分派</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-4-%E6%8C%87%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-number">3.4.</span> <span class="toc-text">3.3.4 指令执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-5-%E6%8C%87%E4%BB%A4%E7%9A%84%E5%AE%8C%E6%88%90%E5%92%8C%E6%8F%90%E4%BA%A4"><span class="toc-number">3.5.</span> <span class="toc-text">3.3.5 指令的完成和提交</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -331,11 +363,11 @@
     </li>
     <li class="copyright_update-time">
         <strong >最后更新：</strong>
-        <time datetime="2023-01-17T19:51:04.403Z" itemprop="dateUpdated">2023年01月18日 03:51:04</time>
+        <time datetime="2023-01-18T06:36:24.841Z" itemprop="dateUpdated">2023年01月18日 14:36:24</time>
     </li>
     <!-- 有需要的可以取消注释 -->
     <!-- <li class="copyright_article-titles"><strong >本文标题：</strong>
-    <a href="http://example.com/2023/01/18/超标量处理器基础学习笔记————第三章/" title="超标量处理器基础学习笔记————第三章" target="_blank">超标量处理器基础学习笔记————第三章</a>
+    <a href="http://example.com/2023/01/18/超标量处理器基础学习笔记————第三章/" title="超标量处理器基础学习笔记————第三章:超标量结构" target="_blank">超标量处理器基础学习笔记————第三章:超标量结构</a>
     </li>
     <li class="copyright_create-time">
     <strong>发布时间：</strong>
