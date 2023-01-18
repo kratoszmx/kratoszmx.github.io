@@ -6,15 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives: 2023 | MarkusChu的博客</title>
+  <title>超标量处理器基础学习笔记————第四章 | MarkusChu的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="毕业于北京航空航天大学，在此记录我的转行历程">
-<meta property="og:type" content="website">
-<meta property="og:title" content="MarkusChu的博客">
-<meta property="og:url" content="http://example.com/archives/2023/index.html">
+  <meta name="description" content="本章重点：超标量处理器执行指令时的动态行为，及针对某些特殊指令的处理技术。超标量流水线设计的最终性能目标：获得最大的指令吞吐率。三种数据流：指令流：分支指令处理。寄存器数据流：ALU指令处理存储器数据流：load&#x2F;store指令处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="超标量处理器基础学习笔记————第四章">
+<meta property="og:url" content="http://example.com/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E5%9B%9B%E7%AB%A0/index.html">
 <meta property="og:site_name" content="MarkusChu的博客">
-<meta property="og:description" content="毕业于北京航空航天大学，在此记录我的转行历程">
+<meta property="og:description" content="本章重点：超标量处理器执行指令时的动态行为，及针对某些特殊指令的处理技术。超标量流水线设计的最终性能目标：获得最大的指令吞吐率。三种数据流：指令流：分支指令处理。寄存器数据流：ALU指令处理存储器数据流：load&#x2F;store指令处理">
 <meta property="og:locale">
+<meta property="article:published_time" content="2023-01-18T06:37:11.000Z">
+<meta property="article:modified_time" content="2023-01-18T11:37:49.869Z">
 <meta property="article:author" content="MarkusChu">
 <meta property="article:tag" content="c&#x2F;c++,linux,爱折腾，好奇心强">
 <meta name="twitter:card" content="summary">
@@ -141,185 +143,265 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-超标量处理器基础学习笔记————第四章" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      超标量处理器基础学习笔记————第四章
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2023" class="archive-year">2023</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E5%9B%9B%E7%AB%A0/" class="archive-article-date">
+
+        
+        <a href="/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E5%9B%9B%E7%AB%A0/" class="archive-article-date">
   	<time datetime="2023-01-18T06:37:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-01-18</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E5%9B%9B%E7%AB%A0/">超标量处理器基础学习笔记————第四章</a>
-    </h1>
-  
+        
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本章重点：超标量处理器执行指令时的动态行为，及针对某些特殊指令的处理技术。<br>超标量流水线设计的最终性能目标：获得最大的指令吞吐率。<br>三种数据流：<br>指令流：分支指令处理。<br>寄存器数据流：ALU指令处理<br>存储器数据流：load&#x2F;store指令处理</p>
+<span id="more"></span>
+<hr>
+<h2 id="4-1-指令流技术"><a href="#4-1-指令流技术" class="headerlink" title="4.1 指令流技术"></a>4.1 指令流技术</h2><p>一般用在超标量流水线的前端，即取指段和译码段。<br>流水线前端的吞吐率是整条流水线吞吐率的上限。<br>主要挑战：条件分支和转跳分支的处理。</p>
+<h3 id="4-1-1-程序控制流和控制相关"><a href="#4-1-1-程序控制流和控制相关" class="headerlink" title="4.1.1 程序控制流和控制相关"></a>4.1.1 程序控制流和控制相关</h3><h3 id="4-1-2-分支造成的性能损失"><a href="#4-1-2-分支造成的性能损失" class="headerlink" title="4.1.2 分支造成的性能损失"></a>4.1.2 分支造成的性能损失</h3><p>条件分支造成的停顿开销可以划分为两个方面（都可能成为时间开销的关键路径）：<br>1、条件判断引起的开销；<br>2、生成目标PC引起的开销；</p>
+<p>分支目标地址生成方式不同：<br>PC相对寻址，一个周期开销<br>寄存器间接寻址，两个周期开销<br>带偏移的寄存器间接寻址，三个周期开销<br>条件码寄存器，分派阶段读取，两个时钟周期开销<br>通用寄存器比较，三个周期开销</p>
+<p>条件判定的方式不同：<br>使用条件码寄存器，在分派段提取条件码，两个时钟开销<br>若ISA包含使用通用寄存器比较的结果来产生分支条件，三个时钟开销</p>
+<p>我们要减少取指停顿或利用停顿周期进行有用的工作，当前主要采用分支预测技术。</p>
+<h3 id="4-1-3-分支预测技术"><a href="#4-1-3-分支预测技术" class="headerlink" title="4.1.3 分支预测技术"></a>4.1.3 分支预测技术</h3><p>分支预测分为两部分：分支目标地址的预测、分支条件的预测</p>
+<p>分支目标地址的推测，可通过设置分支目标缓冲BTB来实现（BTB中每个记录包含两个字段：BIA（分支指令地址）和BTA（分支目标地址）），用来保存前几次分支执行时的目标地址。<br>分支方向推测，方法1，设置取值硬件总是预测为不跳转。方法2，需要软件协同，对ISA进行修改。方法3，基于历史信息做分支预测。</p>
+<p>实例：BTAC（分支目标地址缓冲）和BHT都是在取指段使用当前指令地址PC访问，但BTAC访问延迟是单周期的，而BHT是双周期的。如果BTAC命中说明当前的取指序列中存在分支指令，则预测分支将会跳转并更新PC。在第二个周期中（译码段），根据从BHT中得到的历史信息，将预测同一条分支指令的方向。如果两者预测相同，则不变，否则BTAC预测失效。</p>
+<h3 id="4-1-4-分支预测失败的恢复"><a href="#4-1-4-分支预测失败的恢复" class="headerlink" title="4.1.4 分支预测失败的恢复"></a>4.1.4 分支预测失败的恢复</h3><p>动态分支预测可看做由两个相互影响的模块组成，前面的模块负责在流水线的前端推测分支方向和目标地址；后面的模块负责在流水线的后端验证推测的结果。<br>如果预测失败，需要执行：结束当前指令流并从一个新的、正确的地址取值。</p>
+<h3 id="4-1-5-先进的分支预测技术"><a href="#4-1-5-先进的分支预测技术" class="headerlink" title="4.1.5 先进的分支预测技术"></a>4.1.5 先进的分支预测技术</h3><p>动态分支预测技术局限性较大，其仅基于静态分支的历史信息，并未考虑分支执行的上下文。</p>
+<p>实例：PAs：多个BHSR，多个PHT。s指share，因为PHT的个数无法使得每一个分支都有一个，因此一组分支共享一个PHT，所以称为s</p>
+<h3 id="4-1-6-其他指令流技术"><a href="#4-1-6-其他指令流技术" class="headerlink" title="4.1.6 其他指令流技术"></a>4.1.6 其他指令流技术</h3><p>条件分支：多分支预测技术</p>
+<p>跳转分支：trace cache是一种基于历史信息的取指机制，它将指令的动态执行轨迹信息存储在一个cache中，通过指令地址和分支结果加以访问。轨迹信息是根据动态的分支指令行为收集起来的，包括多个不连续的基本块。每当指令地址命中trace cache，接下来的指令流就从trace cache中取指。trace cache可以看作是按程序先前的执行轨迹对其基本块进行了重排序，当不连续的基本块第一次在支配路径上执行时，结束提交段对其进行合并对齐处理，并生成一个trace存入trace cache中。</p>
+<h2 id="4-2-寄存器数据流技术"><a href="#4-2-寄存器数据流技术" class="headerlink" title="4.2 寄存器数据流技术"></a>4.2 寄存器数据流技术</h2><p>指ALU（寄存器-寄存器型）指令在处理器执行部件中的有效执行。</p>
+<h3 id="4-2-1-寄存器重用和假数据相关"><a href="#4-2-1-寄存器重用和假数据相关" class="headerlink" title="4.2.1 寄存器重用和假数据相关"></a>4.2.1 寄存器重用和假数据相关</h3><p>寄存器的重用：<br>含义：特定ISA体系结构的寄存器数目有限，寄存器分配工具必须将无限的寄存器符号资源映射到有限的、固定的体系结构寄存器上，使得一个寄存器可以保存多个值。<br>缺点：会导致假数据相关、反相关和输出相关。</p>
+<p>写寄存器称为寄存器的定义，读寄存器称作寄存器的使用。</p>
+<p>寄存器分配工具一般都尽量把不重叠的活跃区间映射到同一个体系结构寄存器，以达到最大程度的重用。</p>
+<p>顺序执行时，值与寄存器之间的一一对应关系得到了隐性保护<br>乱序执行时，该关系被打破，应当检测相关并消除之。</p>
+<p>寄存器重用的动态形式是循环中指令重复执行导致的重用，应当消除相关。</p>
+<p>可以通过终止相关指令来消除，会导致性能的急剧下降。</p>
+<h3 id="4-2-2-寄存器重命名技术"><a href="#4-2-2-寄存器重命名技术" class="headerlink" title="4.2.2 寄存器重命名技术"></a>4.2.2 寄存器重命名技术</h3><p>含义：为同一体系结构寄存器中的多个定义动态分配不同的名字。</p>
+<p>一般方法：在体系结构寄存器文件（ARF）之外配置一个独立的重命名寄存器文件（RRF）（映射表技术）；<br>使用单独的RRF重命名时，RRF的放置有两种选择：一种是同ARF一样的独立结构实现RRF，一种是RRF和再定序缓冲结合实现。</p>
+<p>任务：读取源寄存器（译码段或分派段）；分配目的寄存器（译码段或分派段）；更新寄存器（流水线后端）。</p>
+<p>独立的RRF和ARF，两者可以相互独立，也可以集合成一个寄存器文件实现。前者在指令完成之后仍然需要一次数据搬运，后者不需要。<br>集中寄存器文件：只需要将寄存器的名称从重命名寄存器改为体系结构寄存器即可。缺点在于提高了硬件复杂度，其次在现场切换要保存机器状态时，包含机器体系结构状态的寄存器子集必须在状态开始保存之前被显式地标出。</p>
+<p>映射表技术是最有用，最全面的寄存器重命名技术，其特点：<br>1、不需要进行ARF和RRF内容的复制<br>2、在发生中断和现场切换时，必须根据映射表的内容及时确定出当前机器体系结构状态的物理寄存器。</p>
+<h3 id="4-2-3-数据相关和数据流极限"><a href="#4-2-3-数据相关和数据流极限" class="headerlink" title="4.2.3 数据相关和数据流极限"></a>4.2.3 数据相关和数据流极限</h3><p>数据流极限：DFG的关键路径（相关边的延迟累加，总的累计延迟最长的相关链）</p>
+<p>传统的数据流执行模型每条指令当其所有操作数就绪后马上开始执行，当前所有的寄存器数据流技术本质上都是为了逼近数据流极限。</p>
+<h3 id="4-2-4-经典的Tomasulo算法"><a href="#4-2-4-经典的Tomasulo算法" class="headerlink" title="4.2.4 经典的Tomasulo算法"></a>4.2.4 经典的Tomasulo算法</h3><p>Tomasulo算法在最初的FPU基础上加入了3种新的机制：保留站，公共数据总线和寄存器标签</p>
+<p>Tomasulo算法通过寄存器重命名解决了反相关（WAR）和输出相关（WAW）。在实例中Tomasulo算法达到了数据流极限。</p>
+<h3 id="4-2-5-动态执行内核"><a href="#4-2-5-动态执行内核" class="headerlink" title="4.2.5 动态执行内核"></a>4.2.5 动态执行内核</h3><p>超标量微处理器中嵌入了乱序的执行内核（动态执行内核），就像一个精简的Tomasulo算法，可以看做是一个嵌入式数据流引擎，使指令在执行时尽可能接近数据流极限。<br>一个动态执行内核的三个阶段：指令分派，指令执行和指令完成。</p>
+<p>指令分派三个阶段：目标寄存器的重命名、保留站和再定序缓冲的分配、将指令从分派缓冲写入保留站。<br>（寄存器重命名消除寄存器重用引起的假相关；建立两条相关指令之间的生产者-消费者关系）<br>通常，必须具备空闲的重命名寄存器、空闲的保留站记录和空闲的再定序缓冲记录，指令才能分派。</p>
+<p>指令执行三个阶段：就绪指令的发射、发射指令的执行、执行结果的定向。<br>（若某个时钟周期有多条指令就绪，则需要调度算法选择其中一条发射）</p>
+<p>（这一段描述了指令的执行过程）<br>（一般情况下，保留站中的记录在指令发射后就进行回收并供后续指令分派使用，从而尽可能地避免由于保留站饱和导致的停顿。但是某些指令由于执行时会产生异常，将来某个周期可能要重新调度执行，所以这些保留站直到指令执行完毕且确定无异常后才进行回收）</p>
+<p>如果有足够的资源消除结构相关带来的停顿，动态执行内核将可以达到数据流极限。</p>
+<h3 id="4-2-6-保留站和再定序缓冲"><a href="#4-2-6-保留站和再定序缓冲" class="headerlink" title="4.2.6 保留站和再定序缓冲"></a>4.2.6 保留站和再定序缓冲</h3><p>除了功能单元，动态执行内核的关键部件还包括保留站和再定序缓冲。</p>
+<p>与保留站有关的操作有三个：分派、等待和发射。每个记录有“忙&#x2F;闲位”和“就绪位”，每个操作数携带一个有效位。</p>
+<p>分派指将指令从分派缓冲装载到保留站记录中：选择空闲的保留站记录、读出操作数或标签、设置该记录值为“忙”</p>
+<p>指令唤醒：保留站中的某个记录通过监听总线，发现操作数可用，设置“就绪”位为1，表示该指令可以被发射执行，这个过程称为指令唤醒。</p>
+<p>指令发射：也称指令选择，指从保留站中选择一条就绪指令往功能单元加以执行（依据就绪位判断）发射后其保留站指令就被回收。</p>
+<p>保留站监听总线，匹配标签，执行指令唤醒的过程的硬件称为唤醒逻辑<br>保留站在所有的就绪指令中选择指令执行的硬件称为选择逻辑</p>
+<p>再定序缓冲中保存的内容是所有已分派但尚未执行的指令。<br>每条指令的状态：等待执行状态，执行状态和执行完成状态，是否在推测路径上的状态，指令属于那个基本块的状态<br>再定序缓冲组织成一个循环队列并包含头指针和尾指针。</p>
+<p>指令窗口：将保留站和再定序缓冲合为一体。指令窗口的大小决定了机器中可以有多少条指令在同时执行，决定了机器所能达到的指令级并行程度</p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我喝奶茶<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/微信支付.jpeg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E5%9B%9B%E7%AB%A0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%89%E7%AB%A0/" class="archive-article-date">
-  	<time datetime="2023-01-17T19:51:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-01-18</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%89%E7%AB%A0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">超标量处理器基础学习笔记————第三章:超标量结构</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+<span id="busuanzi_container_page_pv">
+        本文阅读量: <span id="busuanzi_value_page_pv"></span>次
+ </span>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/01/18/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%89%E7%AB%A0/">超标量处理器基础学习笔记————第三章:超标量结构</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E6%8C%87%E4%BB%A4%E6%B5%81%E6%8A%80%E6%9C%AF"><span class="toc-number">1.</span> <span class="toc-text">4.1 指令流技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-1-%E7%A8%8B%E5%BA%8F%E6%8E%A7%E5%88%B6%E6%B5%81%E5%92%8C%E6%8E%A7%E5%88%B6%E7%9B%B8%E5%85%B3"><span class="toc-number">1.1.</span> <span class="toc-text">4.1.1 程序控制流和控制相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-2-%E5%88%86%E6%94%AF%E9%80%A0%E6%88%90%E7%9A%84%E6%80%A7%E8%83%BD%E6%8D%9F%E5%A4%B1"><span class="toc-number">1.2.</span> <span class="toc-text">4.1.2 分支造成的性能损失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-3-%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E6%8A%80%E6%9C%AF"><span class="toc-number">1.3.</span> <span class="toc-text">4.1.3 分支预测技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-4-%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%A4%B1%E8%B4%A5%E7%9A%84%E6%81%A2%E5%A4%8D"><span class="toc-number">1.4.</span> <span class="toc-text">4.1.4 分支预测失败的恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-5-%E5%85%88%E8%BF%9B%E7%9A%84%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E6%8A%80%E6%9C%AF"><span class="toc-number">1.5.</span> <span class="toc-text">4.1.5 先进的分支预测技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-6-%E5%85%B6%E4%BB%96%E6%8C%87%E4%BB%A4%E6%B5%81%E6%8A%80%E6%9C%AF"><span class="toc-number">1.6.</span> <span class="toc-text">4.1.6 其他指令流技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E5%AF%84%E5%AD%98%E5%99%A8%E6%95%B0%E6%8D%AE%E6%B5%81%E6%8A%80%E6%9C%AF"><span class="toc-number">2.</span> <span class="toc-text">4.2 寄存器数据流技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-%E5%AF%84%E5%AD%98%E5%99%A8%E9%87%8D%E7%94%A8%E5%92%8C%E5%81%87%E6%95%B0%E6%8D%AE%E7%9B%B8%E5%85%B3"><span class="toc-number">2.1.</span> <span class="toc-text">4.2.1 寄存器重用和假数据相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-%E5%AF%84%E5%AD%98%E5%99%A8%E9%87%8D%E5%91%BD%E5%90%8D%E6%8A%80%E6%9C%AF"><span class="toc-number">2.2.</span> <span class="toc-text">4.2.2 寄存器重命名技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-3-%E6%95%B0%E6%8D%AE%E7%9B%B8%E5%85%B3%E5%92%8C%E6%95%B0%E6%8D%AE%E6%B5%81%E6%9E%81%E9%99%90"><span class="toc-number">2.3.</span> <span class="toc-text">4.2.3 数据相关和数据流极限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-4-%E7%BB%8F%E5%85%B8%E7%9A%84Tomasulo%E7%AE%97%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text">4.2.4 经典的Tomasulo算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-5-%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8C%E5%86%85%E6%A0%B8"><span class="toc-number">2.5.</span> <span class="toc-text">4.2.5 动态执行内核</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-6-%E4%BF%9D%E7%95%99%E7%AB%99%E5%92%8C%E5%86%8D%E5%AE%9A%E5%BA%8F%E7%BC%93%E5%86%B2"><span class="toc-number">2.6.</span> <span class="toc-text">4.2.6 保留站和再定序缓冲</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
+  
+  
+
+  
+
+  
+
+  
+
+<!-- 版权声明 -->
     
+        <!--添加版权声明-->
+
+
+<!-- #版权基础设定：0-关闭声明； 1-文章对应的md文件里有copyright: true属性，才有版权声明； 2-所有文章均有版权声明 -->
+
+  <ul class="copyright">
+    <li class="copyright_author"><strong>本文作者：</strong>
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/01/16/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E7%AB%A0/" class="archive-article-date">
-  	<time datetime="2023-01-16T14:09:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-01-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/01/16/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E7%AB%A0/">超标量处理器基础学习笔记————第一章</a>
-    </h1>
-  
+      MarkusChu
+    </li>
+    </li>
+    <li class="copyright_update-time">
+        <strong >最后更新：</strong>
+        <time datetime="2023-01-18T11:37:49.869Z" itemprop="dateUpdated">2023年01月18日 19:37:49</time>
+    </li>
+    <!-- 有需要的可以取消注释 -->
+    <!-- <li class="copyright_article-titles"><strong >本文标题：</strong>
+    <a href="http://example.com/2023/01/18/超标量处理器基础学习笔记————第四章/" title="超标量处理器基础学习笔记————第四章" target="_blank">超标量处理器基础学习笔记————第四章</a>
+    </li>
+    <li class="copyright_create-time">
+    <strong>发布时间：</strong>
+    2023-01-18
+    </li> -->
+    <li class="copyright_copyright">
+    <strong>版权声明：</strong>
+    本博客所有文章除特别声明外，均采用
+    <a rel="license noopener" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" title="知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议">CC BY-NC-SA 4.0</a>
+    许可协议进行许可。转载请注明出处！
+   </li>
+    <!--版权logo如果加载不出来可以注释掉-->
+    <!-- 
+      <li><a rel="license noopener" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"/></a></li>
+     -->
+  </ul>
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/01/16/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%BA%8C%E7%AB%A0/" class="archive-article-date">
-  	<time datetime="2023-01-16T14:07:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-01-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/01/16/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%AC%AC%E4%BA%8C%E7%AB%A0/">超标量处理器基础学习笔记————第二章：流水线处理器</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/01/15/risc-v%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/" class="archive-article-date">
-  	<time datetime="2023-01-15T14:20:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-01-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/01/15/risc-v%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/">risc-v学习笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/01/15/%E5%8D%9A%E5%AE%A2%E7%AE%80%E4%BB%8B/" class="archive-article-date">
-  	<time datetime="2023-01-15T06:26:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-01-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/01/15/%E5%8D%9A%E5%AE%A2%E7%AE%80%E4%BB%8B/">自我介绍</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+<!-- 添加版权声明》 -->
 
     
-
+<!-- 声明结束 -->
 
           </div>
         </div>
@@ -345,8 +427,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
